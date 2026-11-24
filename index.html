@@ -2,106 +2,109 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#10142b"><meta name="description" content="Небесный вызов — аркадный прыжок вверх!">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png">
-<title>Небесный вызов</title>
+<meta name="theme-color" content="#087e91"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest"><title>Тропический рай</title>
 <style>
-:root{--bg:#10142b;--panel:#1b2344;--line:#46568a;--pink:#ff68bd;--cyan:#56e5ff;--gold:#ffd66b}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}
-body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);display:flex;justify-content:center}
-#app{width:min(100%,520px);height:100dvh;max-height:950px;display:flex;flex-direction:column;padding:10px 12px;gap:9px}
-header{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px}
-.logo{font-weight:1000;letter-spacing:.4px;font-size:clamp(17px,4vw,22px)}.sub{font-size:10px;color:#aebbe8;letter-spacing:1.5px}
-.pills{display:flex;gap:6px}.pill{background:#202b50;border:1px solid #3b4a77;border-radius:12px;padding:7px 9px;font-weight:800;font-size:13px;white-space:nowrap}
-#stage{position:relative;flex:1;min-height:280px;border:2px solid #485b91;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px #0006;background:#15254a}
-canvas{display:block;width:100%;height:100%;touch-action:none}
-.hud{position:absolute;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;font-weight:900;text-shadow:0 2px 5px #111}
-#overlay{position:absolute;inset:0;background:linear-gradient(#0b1027c9,#121a35eF);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px}
-#overlay.hidden{display:none}.hero{font-size:60px;filter:drop-shadow(0 8px 12px #0008)}h1{font-size:clamp(24px,7vw,34px);margin:5px 0 7px;line-height:1.05}.desc{color:#c3ccef;font-size:13px;max-width:290px;line-height:1.5;margin-bottom:17px}
-button{border:0;color:#fff;font:inherit;font-weight:850;cursor:pointer;touch-action:manipulation}
-.primary{padding:13px 23px;border-radius:14px;background:linear-gradient(135deg,#9b62ff,#e45fc5);box-shadow:0 5px 0 #663eaa,0 9px 22px #9b62ff55}
-.controls{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:116px}
-#joyArea{width:126px;height:112px;position:relative;touch-action:none;display:grid;place-items:center}
-#joyBase{width:106px;height:106px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#425783,#1b284d 70%);border:2px solid #6b80b4;box-shadow:inset 0 5px 15px #0a102a,0 5px 15px #0005;position:relative}
-#joyKnob{position:absolute;width:48px;height:48px;border-radius:50%;left:27px;top:27px;background:linear-gradient(145deg,#fff,#93caff 60%,#5d7bda);box-shadow:0 4px 12px #0009;border:2px solid #e4f4ff;transform:translate(0,0)}
-.actionBtns{display:flex;flex-direction:column;gap:8px;flex:1}
-.action{border-radius:13px;padding:12px 10px;background:linear-gradient(135deg,#27375f,#1d294c);border:1px solid #526b9c;font-size:13px}
-.action.shop{background:linear-gradient(135deg,#7845bc,#bd4f9e);border:0}
-#shop{position:absolute;inset:0;background:#0a1025f5;z-index:5;padding:14px;overflow:auto;display:none}
-#shop.open{display:block}.shopHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.shopHead h2{margin:0;font-size:22px}
-.tabs{display:flex;gap:6px;overflow:auto;padding-bottom:9px}.tab{padding:9px 11px;border-radius:10px;background:#253354;white-space:nowrap;font-size:12px}.tab.active{background:#9b62ff}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.item{border:1px solid #3d4c75;border-radius:15px;padding:10px;background:linear-gradient(145deg,#222e54,#18213e);text-align:center;min-width:0}
-.preview{height:72px;display:grid;place-items:center;border-radius:11px;background:radial-gradient(circle,#465b8b,#1a2546);font-size:43px;margin-bottom:8px}
-.item b{font-size:13px;display:block}.item small{color:#bdc9e9}.item button{width:100%;margin-top:8px;padding:8px;border-radius:9px;background:#8d5ce3;font-size:12px}.item button:disabled{background:#3c8d76}
-.note{text-align:center;font-size:10px;color:#9eadd8}
-@media(max-height:650px){#app{gap:5px;padding:6px 9px}.controls{min-height:95px}#joyArea{height:92px}#joyBase{width:88px;height:88px}#joyKnob{left:20px;top:20px}.desc{margin-bottom:9px}}
-</style></head>
-<body><main id="app">
-<header><div><div class="logo">☄ НЕБЕСНЫЙ ВЫЗОВ</div><div class="sub">JUMP • EXPLORE • COLLECT</div></div><div class="pills"><div class="pill">🪙 <span id="coins">0</span></div><div class="pill">🏆 <span id="best">0</span></div></div></header>
-<section id="stage"><canvas id="game" width="420" height="720"></canvas><div class="hud"><span id="height">0 м</span><span id="runCoins">+0 🪙</span></div>
-<div id="overlay"><div class="hero" id="hero">🦊</div><h1 id="title">ВЫШЕ ОБЛАКОВ!</h1><div class="desc" id="desc">Управляй джойстиком, прыгай по платформам, уворачивайся от существ и собирай звёздные монеты.</div><button class="primary" id="start">НАЧАТЬ ПРЫЖОК</button></div>
-<div id="shop"><div class="shopHead"><h2>✨ Гардероб героя</h2><button class="action" id="close">✕</button></div><div style="margin-bottom:10px;color:#d5defc;font-size:13px">Баланс: 🪙 <b id="balance">0</b></div><div class="tabs" id="tabs"></div><div class="grid" id="items"></div></div>
-</section>
-<section class="controls"><div id="joyArea"><div id="joyBase"><div id="joyKnob"></div></div></div><div class="actionBtns"><button class="action shop" id="openShop">🛍 МАГАЗИН</button><button class="action" id="pause">Ⅱ ПАУЗА</button></div></section>
-<div class="note">Держи джойстик влево или вправо • Прогресс сохраняется на устройстве</div>
-</main>
+:root{--ink:#16434b;--gold:#ffe68a;--cream:#fff7d9}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#087e91;font-family:system-ui,-apple-system,sans-serif;touch-action:none;color:var(--ink)}
+#game{position:absolute;inset:0;width:100%;height:100%;display:block}
+.top{position:absolute;top:env(safe-area-inset-top,0px);left:8px;right:8px;display:flex;gap:6px;align-items:center;justify-content:space-between;padding:7px;border:2px solid #e4c35d;border-radius:18px;background:linear-gradient(#fff6c5,#f1cf70);box-shadow:0 4px 0 #a77932;z-index:3;font-weight:900;font-size:clamp(11px,2.8vw,15px)}
+.stat{background:#fff9dc;border-radius:12px;padding:7px 8px;box-shadow:inset 0 2px 3px #d6b75d;white-space:nowrap}.stat b{color:#16834d}
+.top button,.pill{border:0;border-radius:12px;padding:8px 11px;background:#087e91;color:white;font-weight:900;box-shadow:0 3px 0 #075866}
+.quest{position:absolute;top:calc(env(safe-area-inset-top,0px) + 57px);left:10px;right:10px;z-index:2;border-radius:14px;padding:7px 11px;background:#fff8d7dd;border:1px solid #d6bd69;font-size:12px;font-weight:800;display:flex;justify-content:space-between}
+.bottom{position:absolute;left:8px;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 7px);z-index:4;border:2px solid #d8b24e;border-radius:20px;background:linear-gradient(#fff2b5,#e8bd52);box-shadow:0 4px 0 #93652e;padding:7px}
+.tabs{display:flex;gap:5px;overflow:auto;scrollbar-width:none}.tabs button{flex:1;min-width:0;border:0;border-radius:12px 12px 5px 5px;background:#f9e8a4;padding:8px 4px;font-size:11px;font-weight:900;color:#674a1e}.tabs button.active{background:#fffdf0;outline:2px solid #bd8b35}
+.items{display:flex;gap:7px;overflow-x:auto;padding:8px 1px 3px;scrollbar-width:none}.item{flex:0 0 68px;height:67px;border:2px solid #d5b34f;border-radius:12px;background:linear-gradient(#fff,#fff0bb);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:27px;position:relative}.item small{font-size:9px;font-weight:900;color:#694d1d}.item.sel{outline:3px solid #0b8c98}.item em{position:absolute;right:3px;top:2px;font-size:9px;font-style:normal;background:#fff8d5;border-radius:5px;padding:1px 3px}
+.hint{font-size:10px;text-align:center;color:#75531c;font-weight:800;padding:3px}
+.overlay{position:absolute;inset:0;background:#082d36a8;z-index:10;display:none;align-items:center;justify-content:center;padding:18px}.panel{width:min(460px,100%);max-height:82vh;overflow:auto;background:linear-gradient(#fff9dc,#f2d17b);border:3px solid #b98735;border-radius:22px;padding:17px;box-shadow:0 8px 0 #684a27}.panel h2{margin:0 0 10px;font-size:22px}.panel p{font-size:13px}.panel button{border:0;border-radius:12px;padding:10px 13px;background:#087e91;color:white;font-weight:900;margin:4px}.close{float:right;background:#b64d35!important}.shoprow{display:flex;align-items:center;justify-content:space-between;padding:9px;border-bottom:1px solid #d5b65d;font-weight:800}.toast{position:absolute;z-index:8;left:50%;top:26%;transform:translate(-50%,-50%);background:#fff8d9;border:2px solid #d5ad4e;border-radius:15px;padding:10px 15px;font-weight:900;box-shadow:0 4px #956b32;opacity:0;pointer-events:none;transition:opacity .2s;text-align:center}.toast.show{opacity:1}
+@media(min-width:700px){.bottom{left:50%;transform:translateX(-50%);width:min(680px,95%)}.top{left:50%;transform:translateX(-50%);width:min(680px,95%)}.quest{left:50%;transform:translateX(-50%);width:min(660px,92%)}}
+</style></head><body>
+<canvas id="game"></canvas>
+<div class="top">
+ <div class="stat">🪙 <b id="coins">1200</b></div><div class="stat">👥 <b id="guests">12</b></div><div class="stat">⭐ <b id="level">1</b></div><button id="menuBtn">☰</button>
+</div>
+<div class="quest"><span>🎯 ЗАДАНИЕ: Построй 3 объекта</span><span id="questCount">0 / 3</span></div>
+<div class="toast" id="toast"></div>
+<div class="bottom">
+ <div class="tabs" id="tabs"><button class="active" data-cat="build">🏨 Постройки</button><button data-cat="nature">🌴 Растения</button><button data-cat="fun">🛟 Развлечения</button><button data-cat="decor">✨ Декор</button></div>
+ <div class="items" id="items"></div><div class="hint" id="hint">Выбери объект, затем коснись свободного места на острове</div>
+</div>
+<div class="overlay" id="overlay"><div class="panel" id="panel"></div></div>
 <script>
 (()=>{
-const $=id=>document.getElementById(id),cv=$('game'),cx=cv.getContext('2d'),W=420,H=720;
-const catalog={
-skin:[['Лисёнок','🦊',0,'#ff9b54'],['Космонавт','🧑‍🚀',55,'#a8e9ff'],['Лунный кот','🐱',90,'#c6a7ff'],['Неон-дракон','🐲',145,'#65f5cf'],['Королевский слизень','👑',190,'#ffdb72'],['Кибер-ниндзя','🥷',240,'#ff79c8']],
-world:[['Звёздная ночь','🌌',0],['Сахарный закат','🌅',65],['Ледяная комета','❄️',100],['Галактика','🪐',150]],
-platform:[['Мятные','🟩',0],['Неоновые','💠',55],['Кристальные','💎',95],['Золотые','🌟',140]],
-monster:[['Прыг-слизни','🟣',0],['Призраки','👻',60],['Космо-жуки','🪲',105],['Пиксельные боты','🤖',155]]
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+let W=0,H=0,dpr=1,coins=1200,guests=12,level=1,placed=[],selected=null,cat='build',tick=0,camX=0,camY=0,scale=1,drag=null,toastTimer;
+const items={
+ build:[['🏖️','Шезлонг',90,1],['🍹','Пляжный бар',260,2],['🏡','Бунгало',420,3],['🍦','Кафе-мороженое',350,3],['🏨','Мини-отель',750,5]],
+ nature:[['🌴','Пальма',70,1],['🌺','Цветы',35,1],['🌳','Тропическое дерево',110,1],['🌿','Живая изгородь',55,1]],
+ fun:[['🛝','Водная горка',520,4],['🛶','Прокат лодок',390,3],['🏊','Бассейн',650,5],['🏄','Сёрф-станция',310,2]],
+ decor:[['⛲','Фонтан',280,2],['🗿','Статуя',190,1],['🪧','Указатель',65,1],['🎡','Мини-аттракцион',850,6]]
 };
-let save={coins:0,best:0,owned:{skin:[0],world:[0],platform:[0],monster:[0]},equip:{skin:0,world:0,platform:0,monster:0}};
-try{let s=JSON.parse(localStorage.getItem('sky-v2'));if(s)save={...save,...s,owned:{...save.owned,...s.owned},equip:{...save.equip,...s.equip}}}catch(e){}
-const persist=()=>{try{localStorage.setItem('sky-v2',JSON.stringify(save))}catch(e){}};
-function hud(){ $('coins').textContent=save.coins;$('best').textContent=save.best;$('balance').textContent=save.coins;$('hero').textContent=catalog.skin[save.equip.skin][1]}
-hud();
-let tab='skin';
-function shop(){ $('tabs').innerHTML='';Object.keys(catalog).forEach(k=>{let b=document.createElement('button');b.className='tab '+(tab===k?'active':'');b.textContent=({skin:'🧑 Герои',world:'🌌 Миры',platform:'🧱 Платформы',monster:'👾 Монстры'})[k];b.onclick=()=>{tab=k;shop()};$('tabs').append(b)});
-$('items').innerHTML='';catalog[tab].forEach((it,i)=>{let owned=save.owned[tab].includes(i),equipped=save.equip[tab]===i;let d=document.createElement('div');d.className='item';d.innerHTML=`<div class="preview">${it[1]}</div><b>${it[0]}</b><small>${it[2]?'🪙 '+it[2]:'Бесплатно'}</small>`;let b=document.createElement('button');b.textContent=equipped?'Надето':owned?'Надеть':'Купить';b.disabled=equipped;b.onclick=()=>{if(owned)save.equip[tab]=i;else if(save.coins>=it[2]){save.coins-=it[2];save.owned[tab].push(i);save.equip[tab]=i}else{b.textContent='Мало монет';return}persist();hud();shop()};d.append(b);$('items').append(d)})}
-$('openShop').onclick=()=>{$('shop').classList.add('open');shop();if(state==='play')pauseGame()};$('close').onclick=()=>$('shop').classList.remove('open');
-let state='menu',score=0,earned=0,camera=0,player,plats,mobs,stars,particles=[],last=0,raf=0,axis=0;
-function newPlat(y,x){return{x:x??Math.random()*320+20,y,w:62+Math.random()*25,h:13,v:Math.random()<.28?1.1:0,dir:1,break:Math.random()<.13}}
-function reset(){score=0;earned=0;camera=0;player={x:195,y:570,vy:-8,vx:0};plats=[{x:150,y:640,w:120,h:14,v:0,dir:1}];let y=580;while(y>-150){plats.push(newPlat(y));y-=75+Math.random()*35}mobs=[];stars=[];for(let i=0;i<6;i++)mobs.push({x:Math.random()*360+25,y:Math.random()*500-100,dir:Math.random()<.5?1:-1});$('runCoins').textContent='+0 🪙'}
-function begin(){reset();state='play';$('overlay').classList.add('hidden');$('shop').classList.remove('open');last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
-function finish(){state='over';save.best=Math.max(save.best,Math.floor(score));persist();hud();$('title').textContent='ПРЫЖОК ЗАВЕРШЁН';$('desc').textContent=`Ты поднялся на ${Math.floor(score)} м и собрал ${earned} монет. Попробуешь ещё раз?`;$('start').textContent='ИГРАТЬ СНОВА';$('hero').textContent='🏅';$('overlay').classList.remove('hidden')}
-function pauseGame(){if(state!=='play')return;state='pause';$('title').textContent='ПАУЗА';$('desc').textContent='Передохни. Твой прогресс в этом прыжке сохранён.';$('start').textContent='ПРОДОЛЖИТЬ';$('hero').textContent='⏸️';$('overlay').classList.remove('hidden')}
-$('start').onclick=()=>{if(state==='pause'){state='play';$('overlay').classList.add('hidden');last=performance.now();raf=requestAnimationFrame(loop)}else begin()};
-$('pause').onclick=()=>{if(state==='play')pauseGame();else if(state==='pause'){$('start').click()}};
-const themes=[['#10142b','#263b6c'],['#44234e','#e67b83'],['#102b4b','#5bc3df'],['#090b28','#4b328e']];
-function draw(){let t=themes[save.equip.world];let g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,t[0]);g.addColorStop(1,t[1]);cx.fillStyle=g;cx.fillRect(0,0,W,H);
-for(let i=0;i<75;i++){let x=(i*97+17)%W,y=(i*139+Math.floor(camera*.28))%H;cx.fillStyle=i%4?'#ffffff8a':'#8ceaff';cx.globalAlpha=.35+(i%4)*.12;cx.beginPath();cx.arc(x,y,i%5===0?2:1,0,7);cx.fill()}cx.globalAlpha=1;
-let pc=['#70e6a1','#52e9ff','#a9caff','#ffd66b'][save.equip.platform];
-plats.forEach(p=>{let y=p.y-camera;if(y<-25||y>H+20)return;cx.fillStyle=pc;cx.shadowColor=pc;cx.shadowBlur=10;round(cx,p.x,y,p.w,p.h,7);cx.fill();cx.shadowBlur=0;cx.fillStyle='#ffffff80';round(cx,p.x+7,y+2,p.w-14,3,2);cx.fill()});
-stars.forEach(s=>{if(s.got)return;let y=s.y-camera;cx.font='23px sans-serif';cx.fillText('✦',s.x,y)});
-mobs.forEach(m=>{let y=m.y-camera;if(y<-30||y>H+30)return;let em=['🟣','👻','🪲','🤖'][save.equip.monster];cx.font='27px system-ui';cx.fillText(em,m.x-13,y+9)});
-cx.font='38px system-ui';cx.textAlign='center';cx.fillText(catalog.skin[save.equip.skin][1],player.x,player.y-camera+12);cx.textAlign='left'}
-function round(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
-function loop(now){if(state!=='play')return;let dt=Math.min((now-last)/16.67,2);last=now;
-player.vx=axis*5.2;player.x+=player.vx*dt;if(player.x<-20)player.x=W+15;if(player.x>W+20)player.x=-15;let old=player.y;player.vy+=.24*dt;player.y+=player.vy*dt;
-plats.forEach(p=>{p.x+=p.v*p.dir*dt;if(p.x<3||p.x+p.w>W-3)p.dir*=-1;if(player.vy>0&&old+12<=p.y&&player.y+12>=p.y&&player.x+12>p.x&&player.x-12<p.x+p.w){player.vy=p.break?-7.5:-9.2;if(p.break)p.y=99999}});
-mobs.forEach(m=>{m.x+=m.dir*1.2*dt;if(m.x<15||m.x>405)m.dir*=-1;if(Math.abs(m.x-player.x)<24&&Math.abs(m.y-player.y)<27){finish();return}});
-stars.forEach(s=>{if(!s.got&&Math.abs(s.x-player.x)<24&&Math.abs(s.y-player.y)<25){s.got=true;save.coins++;earned++;hud();persist();$('runCoins').textContent='+'+earned+' 🪙'}});
-if(state!=='play')return;
-if(player.y-camera<260)camera=player.y-260;score=Math.max(score,570-camera);
-let min=Math.min(...plats.map(p=>p.y));while(min>camera-120){let y=min-(76+Math.random()*35),p=newPlat(y);plats.push(p);min=y;if(Math.random()<.36)stars.push({x:30+Math.random()*360,y:y-35,got:false});if(Math.random()<.2)mobs.push({x:30+Math.random()*360,y:y-30,dir:Math.random()<.5?1:-1})}
-plats=plats.filter(p=>p.y<camera+H+60);mobs=mobs.filter(m=>m.y<camera+H+60);stars=stars.filter(s=>s.y<camera+H+50);
-if(player.y-camera>H+35){finish();return}
-$('height').textContent=Math.floor(score)+' м';draw();raf=requestAnimationFrame(loop)}
-// Analog joystick: displacement maps continuously to -1..1.
-const area=$('joyArea'),knob=$('joyKnob');let joyId=null;
-function moveJoy(e){let r=area.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),limit=34;dx=Math.max(-limit,Math.min(limit,dx));axis=dx/limit;knob.style.transform=`translate(${dx}px,0px)`}
-area.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;area.setPointerCapture(joyId);moveJoy(e)});
-area.addEventListener('pointermove',e=>{if(e.pointerId===joyId)moveJoy(e)});
-function release(e){if(e.pointerId===joyId){joyId=null;axis=0;knob.style.transform='translate(0,0)'}}
-area.addEventListener('pointerup',release);area.addEventListener('pointercancel',release);area.addEventListener('lostpointercapture',release);
-window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')axis=-1;if(e.key==='ArrowRight'||e.key==='d')axis=1});
-window.addEventListener('keyup',e=>{if(['ArrowLeft','ArrowRight','a','d'].includes(e.key))axis=0});
-reset();draw();
+const colors=['#e8b96c','#f0d28d','#d6a65f','#b9d9ce'];
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener('resize',resize);resize();
+function iso(x,y){return {x:W/2+(x-y)*31*scale+camX,y:H*.52+(x+y)*16*scale+camY}}
+function polygon(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
+function ellipse(x,y,rx,ry,c){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=c;ctx.fill()}
+function line(a,b,c,w=2){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=c;ctx.lineWidth=w;ctx.stroke()}
+function draw(){
+ tick+=.016;ctx.clearRect(0,0,W,H);
+ let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#70d5e5');sky.addColorStop(.55,'#2db8c5');sky.addColorStop(1,'#087b91');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // sparkling sea
+ for(let i=0;i<75;i++){let x=(i*97+tick*18)%W,y=(i*53+tick*11)%(H*.82);ctx.globalAlpha=.12+.12*Math.sin(tick*2+i);line({x,y},{x:x+8,y:y-2},'#e5ffff',1); }ctx.globalAlpha=1;
+ // island isometric grid
+ for(let y=-2;y<13;y++)for(let x=-5;x<6;x++){
+  let p=iso(x,y);let sand=(x+y> -2 && x+y<12 && x-y<9 && y-x<10);
+  if(!sand)continue;
+  let c=((x+y)%3===0)?'#f2d59a':'#e9c783';
+  polygon([{x:p.x,y:p.y},{x:p.x+31*scale,y:p.y+16*scale},{x:p.x,y:p.y+32*scale},{x:p.x-31*scale,y:p.y+16*scale}],c,'#d5b374');
+ }
+ // water channel diagonally
+ ctx.save();ctx.globalAlpha=.88;polygon([{x:0,y:H*.30},{x:W*.25,y:H*.30},{x:W*.83,y:H*.76},{x:W*.70,y:H*.86},{x:W*.10,y:H*.48},{x:0,y:H*.48}],'#159eb3','#9de8e6');ctx.restore();
+ for(let i=0;i<10;i++){let x=(i*83+tick*15)%W,y=H*.36+i*H*.043;line({x,y},{x:x+22,y:y+8},'#9de8e6',2)}
+ // palm silhouettes at edge
+ for(let i=0;i<8;i++){let p=iso(-4+i,1+(i%3)*3);drawPalm(p.x,p.y,0.72)}
+ // built objects
+ for(const o of placed){let p=iso(o.x,o.y);drawObject(p.x,p.y,o)}
+ // visitors wander
+ for(let i=0;i<Math.min(guests,24);i++){let x=((i*47+tick*4)%260)-130,y=((i*19)%130)-45,p=iso(x/31,y/16);ellipse(p.x,p.y+3,3.3,2,'#93633e');ellipse(p.x,p.y-4,3.4,4,['#e75b49','#f7c84c','#315e9c','#f5f0d9'][i%4]);}
+ // dock + boats
+ let dock=iso(3,1);polygon([{x:dock.x-18,y:dock.y-5},{x:dock.x+25,y:dock.y+17},{x:dock.x+17,y:dock.y+26},{x:dock.x-26,y:dock.y+4}],'#98623a','#6b452a');
+ for(let i=0;i<3;i++){let bx=(dock.x+30+i*27+Math.sin(tick+i)*5),by=dock.y+25+i*8;ellipse(bx,by,12,5,'#f6f1dd');polygon([{x:bx-10,y:by},{x:bx+10,y:by},{x:bx+5,y:by+6},{x:bx-5,y:by+6}],'#ef794b');}
+ // selected placement preview
+ if(selected&&pointer.active){let g=screenToGrid(pointer.x,pointer.y),p=iso(g.x,g.y);ellipse(p.x,p.y+8,19,8,'#0b657755');drawObject(p.x,p.y,{icon:selected[0],name:selected[1],ghost:true})}
+ requestAnimationFrame(draw)
+}
+function drawPalm(x,y,s=1){ctx.save();ctx.translate(x,y);ctx.scale(s,s);line({x:0,y:0},{x:2,y:-30},'#8a5934',5);for(let i=0;i<6;i++){let a=-2.9+i*.62;line({x:2,y:-29},{x:2+Math.cos(a)*23,y:-29+Math.sin(a)*13},'#27834e',5)}ellipse(2,-30,4,4,'#a7d64d');ctx.restore()}
+function drawObject(x,y,o){ctx.save();let g=o.ghost;ctx.globalAlpha=g?.65:1;ellipse(x,y+7,17,7,'#80623c55');
+let icon=o.icon;
+if(icon==='🌴'){drawPalm(x,y,.9)}
+else if(icon==='🌺'||icon==='🌿'||icon==='🌳'){ellipse(x,y-8,12,9,icon==='🌺'?'#f17e9a':icon==='🌿'?'#388b50':'#287b4a');ellipse(x-4,y-10,4,4,'#68b95a')}
+else if(icon==='🏖️'){polygon([{x:x-14,y:y-2},{x,y:y+5},{x:x+14,y:y-2},{x,y:y-9}],'#e4a74e');line({x,y:y-7},{x,y:y-28},'#8d6639',2);for(let i=0;i<8;i++){let a=i*Math.PI/4;line({x,y:y-28},{x:x+Math.cos(a)*14,y:y-28+Math.sin(a)*7},i%2?'#f6a34d':'#f3d64f',5)}}
+else {let h=icon==='🏨'?33:icon==='🏡'?23:icon==='🏊'?8:icon==='🛝'?27:17;polygon([{x:x-17,y:y-5},{x,y:y+4},{x:x+17,y:y-5},{x,y:y-14}], '#c58c4c','#936333');polygon([{x:x-13,y:y-13},{x,y:y-6},{x:x+13,y:y-13},{x,y:y-22}],o.color||'#f5d28a','#986d3a');polygon([{x:x-13,y:y-13},{x,y:y-6},{x,y:y-h},{x:x-13,y:y-h-7}], '#f6e4b6','#b68c4b');polygon([{x,y:y-6},{x:x+13,y:y-13},{x:x+13,y:y-h-7},{x,y:y-h}], '#e9bc75','#a87c40');polygon([{x:x-2,y:y-18},{x:x+2,y:y-16},{x:x+2,y:y-8},{x:x-2,y:y-10}], '#6fc5d0');}
+if(['🍹','🍦','⛲','🗿','🪧','🎡','🛶','🏊','🏄','🛝','🏡','🍹','🏨'].includes(icon)){ctx.font='18px system-ui';ctx.textAlign='center';ctx.fillText(icon,x,y-19)}
+ctx.restore()}
+const pointer={x:0,y:0,active:false};function screenToGrid(px,py){let xx=(px-W/2-camX)/(31*scale), yy=(py-H*.52-camY)/(16*scale);return {x:Math.round((xx+yy)/2),y:Math.round((yy-xx)/2)}}
+function showToast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1800)}
+function refresh(){document.getElementById('coins').textContent=Math.floor(coins).toLocaleString('ru-RU');document.getElementById('guests').textContent=guests;document.getElementById('level').textContent=level;document.getElementById('questCount').textContent=Math.min(placed.length,3)+' / 3';}
+function save(){localStorage.setItem('tropico-save',JSON.stringify({coins,guests,level,placed}))}
+function load(){try{let s=JSON.parse(localStorage.getItem('tropico-save'));if(s){coins=s.coins;guests=s.guests;level=s.level;placed=s.placed||[]}}catch(e){}refresh()}
+function renderItems(){let box=document.getElementById('items');box.innerHTML='';items[cat].forEach(it=>{let b=document.createElement('button');b.className='item'+(selected===it?' sel':'');b.innerHTML=it[0]+'<small>'+it[1]+'</small><em>'+it[2]+'🪙</em>';b.onclick=()=>{selected=it;renderItems();showToast('Выбрано: '+it[1]+' — коснись пляжа')};box.appendChild(b)})}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));selected=null;renderItems()});
+function placeAt(x,y){if(!selected)return;let [icon,name,cost,rep]=selected;if(coins<cost){showToast('Не хватает монет!');return}if(placed.some(o=>Math.abs(o.x-x)<1&&Math.abs(o.y-y)<1)){showToast('Это место уже занято');return}if(x< -5||x>5||y< -2||y>11){showToast('Выбери место на территории');return}coins-=cost;placed.push({x,y,icon,name,cost,rep,color:colors[placed.length%colors.length]});guests+=Math.max(1,Math.floor(rep/2));if(placed.length%3===0)level++;refresh();save();showToast(name+' построен!');}
+canvas.addEventListener('pointerdown',e=>{pointer.x=e.clientX;pointer.y=e.clientY;pointer.active=true;drag={x:e.clientX,y:e.clientY,cx:camX,cy:camY,moved:false};canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{pointer.x=e.clientX;pointer.y=e.clientY;if(drag){let dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>10)drag.moved=true;if(drag.moved){camX=drag.cx+dx;camY=drag.cy+dy}}});
+canvas.addEventListener('pointerup',e=>{if(drag&&!drag.moved){let g=screenToGrid(e.clientX,e.clientY);if(selected)placeAt(g.x,g.y);else{let o=placed.find(o=>{let p=iso(o.x,o.y);return Math.hypot(p.x-e.clientX,p.y-e.clientY)<22});if(o){showPanel('Объект: '+o.name,'Можно получать доход с курорта. Улучши его, чтобы увеличить привлекательность.',`<button onclick="upgrade(${placed.indexOf(o)})">⬆ Улучшить за ${Math.floor(o.cost*.7)} 🪙</button>`)}}}drag=null;pointer.active=false});
+window.upgrade=i=>{let o=placed[i];let price=Math.floor(o.cost*.7);if(coins<price){showToast('Не хватает монет');return}coins-=price;o.rep+=2;guests+=2;refresh();save();closePanel();showToast('Объект улучшен!')};
+function showPanel(title,body,extra=''){document.getElementById('panel').innerHTML=`<button class="close" onclick="closePanel()">✕</button><h2>${title}</h2><p>${body}</p>${extra}<button onclick="closePanel()">Закрыть</button>`;document.getElementById('overlay').style.display='flex'}
+function closePanel(){document.getElementById('overlay').style.display='none'}window.closePanel=closePanel;
+document.getElementById('menuBtn').onclick=()=>showPanel('🌴 Тропический рай',`Уровень ${level}. На курорте ${guests} гостей. Построено объектов: ${placed.length}.`,'<button onclick="collect()">💰 Собрать доход</button><button onclick="resetGame()">↻ Начать заново</button><button onclick="howto()">❔ Как играть</button>');
+window.collect=()=>{let gain=guests*4+placed.length*12;coins+=gain;refresh();save();closePanel();showToast('Получено '+gain+' монет!')};
+window.resetGame=()=>{if(confirm('Начать заново? Весь прогресс будет сброшен.')){coins=1200;guests=12;level=1;placed=[];save();refresh();closePanel();showToast('Новый курорт ждёт тебя!')}};
+window.howto=()=>showPanel('Как играть','Выбери вкладку внизу, затем здание или украшение. Коснись свободного места на острове, чтобы построить его. Перетаскивай пальцем карту, чтобы осмотреть курорт. Нажимай на построенные объекты, чтобы улучшать их. Через меню собирай доход. Прогресс сохраняется на этом устройстве.');
+// passive income
+setInterval(()=>{if(placed.length){coins+=Math.max(1,Math.floor(guests*.18));refresh();save()}},5000);
+load();renderItems();draw();
 })();
 </script></body></html>
-<script>if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});</script>
+<script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));</script>
